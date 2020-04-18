@@ -9,6 +9,7 @@ const keyExtractor = ({ id }) => id.toString();
 const CardList = ({ items, commentsForItem, onPressComments }) => {
     const renderItem = ({ item: { id, author } }) => {
         const comments = commentsForItem[id];
+        //console.log(`In CardList, 'commentsForItem[${id}]' contains ${comments}`)
 
         return (
             <Card

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Platform, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Platform, Modal, AsyncStorage } from 'react-native';
 import Constants from 'expo-constants';
 import Feed from './screens/Feed';
 import Comments from './screens/Comments';
@@ -8,6 +8,27 @@ export default function App() {
   const [commentsForItem, setCommentsForItem] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const ASYNC_STORAGE_COMMENTS_KEY = 'ASYNC_STORAGE_COMMENTS_KEY';
+
+  useEffect(() => {
+    try {
+      (async () => {
+        const commentsForItem = await AsyncStorage.getItem(ASYNC_STORAGE_COMMENTS_KEY);
+        console.log(`'${commentsForItem}'`);
+        //console.log(`retrieved comments: ${commentsForItem["1"]}`);
+
+        //TODO: never quite got the AsyncStorage thing working...  :-(
+
+        //console.log(JSON.parse(commentsForItem)["1"]);
+        setCommentsForItem({
+          commentsForItem: commentsForItem ? JSON.parse(commentsForItem) : {}
+        });
+        //console.log(`commentsForItem: ${commentsForItem}`);
+      })();
+    } catch (error) {
+      console.log(`Failed to load comments: ${error}`);
+    }
+  }, []);
 
   const openCommentsScreen = id => {
     setShowModal(true);
@@ -19,10 +40,8 @@ export default function App() {
     setSelectedItemId(null);
   };
 
-  const onSubmitComment = text => {
+  const onSubmitComment = async text => {
     const comments = commentsForItem[selectedItemId] || [];
-
-    console.log(`App::onSubmitComment, text is ${text}, comments are ${comments}`)
 
     const updated = {
       ...commentsForItem,
@@ -30,6 +49,12 @@ export default function App() {
     };
 
     setCommentsForItem(updated);
+
+    try {
+      await AsyncStorage.setItem(ASYNC_STORAGE_COMMENTS_KEY, JSON.stringify(updated));
+    } catch (error) {
+      console.log(`Failed to save comment "${text}" for ${selectedItemId}: ${error}`);
+    }
   };
   
   return (
