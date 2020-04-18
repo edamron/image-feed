@@ -17,7 +17,7 @@ const AuthorRow = ({ fullname, linkText, onPressLinkText }) => {
                 {fullname}
             </Text>
             {!!linkText && (
-                <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, borderColor: 'darkblue', padding: 5 }} onPress={onPressLinkText}>
+                <TouchableOpacity style={{ borderWidth: 2, borderRadius: 5, borderColor: 'rebeccapurple', padding: 5 }} onPress={onPressLinkText}>
                     <Text numberOfLines={1}>{linkText}</Text>
                 </TouchableOpacity>
             )}

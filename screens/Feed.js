@@ -4,7 +4,7 @@ import { ActivityIndicator, Text, ViewPropTypes, SafeAreaView } from 'react-nati
 import { fetchImages } from '../utils/api';
 import CardList from '../components/CardList';
 
-const Feed = ( style ) => {
+const Feed = ({ style, commentsForItem, onPressComments }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [items, setItems] = useState([]);
@@ -32,13 +32,21 @@ const Feed = ( style ) => {
 
     return (
         <SafeAreaView style={style}>
-            <CardList items={items} />
+            <CardList
+                items={items}
+                commentsForItem={commentsForItem}
+                onPressComments={onPressComments}
+            />
         </SafeAreaView>
     );
 };
 
 Feed.propTypes = {
     style: ViewPropTypes.style,
+    commentsForItem: PropTypes.objectOf(
+        PropTypes.arrayOf(PropTypes.string),
+    ).isRequired,
+    onPressComments: PropTypes.func.isRequired,
 };
 
 Feed.defaultProps = {

@@ -4,14 +4,12 @@ import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
 import AuthorRow from './AuthorRow';
 
 // not sure memo, and the comparison function are necessary here
-const Card = React.memo(({ fullname, image, linkText, onPressLinkText }) => {
+const Card = ({ fullname, image, linkText, onPressLinkText }) => {
     const [loading, setLoading] = React.useState(true);
 
     const handleLoad = () => {
         setLoading(false);
     };
-
-    
 
     return (
         <View>
@@ -24,7 +22,7 @@ const Card = React.memo(({ fullname, image, linkText, onPressLinkText }) => {
             </View>
         </View>
     );
-}, (prevProps, nextProps) => prevProps.linkText !== nextProps.linkText);
+};
 
 Card.propTypes = {
     fullname: PropTypes.string.isRequired,
